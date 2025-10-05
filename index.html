@@ -1308,6 +1308,42 @@ def _p6_do_action(game, action_id: str):
     if action_id == "ct_after":
         game.say('Caretaker: "The grove breathes easier. Thank you."')
         return
+        # --- Missing caretakers actions (activate these dialogue choices) ---
+    if action_id == "ct_wilds":
+        game.say('Caretaker: "The Wilds are old and restless. Paths shift, but truth holds: keep your wits, keep a light."')
+        _p6_open_caretaker_dialog(game)
+        return
+
+    if action_id == "ct_threats":
+        game.say('Caretaker: "Wolves thin as fog, bramble-things that snag the mind, and shades by the bog. Don’t linger when the air turns cold."')
+        _p6_open_caretaker_dialog(game)
+        return
+
+    if action_id == "ct_grove_lore":
+        game.say('Caretaker: "The northern grove keeps the Sanctum breathing. Its roots drink the dawn. When it ails, so do we."')
+        _p6_open_caretaker_dialog(game)
+        return
+
+    if action_id == "ct_herb_tips":
+        game.say('Caretaker: "Herbs like damp edges. Try the brook or shaded ground. Forage patiently—fiber and herb both have their uses."')
+        _p6_open_caretaker_dialog(game)
+        return
+
+    if action_id == "ct_grove_sick":
+        game.say('Caretaker: "A chill blight rides the leaf-veins. A simple remedy—two good herbs—will set it right enough."')
+        _p6_open_caretaker_dialog(game)
+        return
+
+    if action_id == "ct_more_work":
+        game.say('Caretaker: "For now, look east. The Ranger needs ore, the Trader craves fish, and the Hermit seeks glowcaps. They’ll keep your hands honest."')
+        _p6_open_caretaker_dialog(game)
+        return
+
+    if action_id == "ct_story":
+        game.say('Caretaker: "Once, the Sanctum bell rang so softly even moths bowed. We listen still, in case it learns our names again."')
+        _p6_open_caretaker_dialog(game)
+        return
+
     if action_id == "ct_bye":
         game.say("You end the conversation.")
         game._p6["dialog"] = None
