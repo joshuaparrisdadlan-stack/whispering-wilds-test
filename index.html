@@ -449,6 +449,17 @@ class Game:
             return True
         cmd, args = parts[0].lower(), parts[1:]
 
+# --- Numeric shortcut for dialogue (typing "7" acts like "say 7") ---
+#if cmd.isdigit():
+    # Reuse Part 6's say handler. It will print a helpful message if no dialog is open.
+ #   try:
+ #       return _p6_cmd_say(self, [cmd])
+ #   except NameError:
+        # Part 6 not loaded; fall through to unknown command
+        pass
+
+
+  
         ext = globals().get("ext_handle_command")
         if callable(ext):
             try:
@@ -492,7 +503,12 @@ class Game:
         if cmd == "stats":
             self.stats()
             return True
+            # --- Numeric shortcut for dialogue (e.g. typing just "1" acts like "say 1") ---
+        if cmd.isdigit():
+            _p6_cmd_say(game, [cmd])
+            return
 
+  
         self.say("Unknown command. Try 'help'.")
         return True
 
@@ -606,7 +622,8 @@ def _p3_forage(game):
     found = "herb" if rng.random() < 0.5 else "fiber"
     game._p3["mats"][found] += 1
     game.say(f"You forage and find 1 {found}.")
-        # --- Tutorial progress: Foraging lesson ---
+
+    # --- Tutorial progress: Foraging lesson ---
     try:
         # Only complete when the player forages at the brook (brook_ne)
         # and the lesson is currently accepted.
@@ -625,6 +642,7 @@ def _p3_forage(game):
     except Exception:
         # Be silent if earlier parts aren’t loaded
         pass
+
 
 
 def _p3_craft(game, what):
