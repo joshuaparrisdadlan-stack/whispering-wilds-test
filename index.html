@@ -1292,10 +1292,7 @@ def _p6_cmd_forget_topics(game):
     game._p6.setdefault("seen", {}).setdefault("caretaker", set()).clear()
     print("Forgot caretaker topics.")
 
-# in p6_ext_handle_command(...)
-if cmd == "forget_topics":
-    _p6_cmd_forget_topics(game)
-    return True
+
 
 
 def _p6_eval_requirements(game, need: dict) -> bool:
@@ -1524,6 +1521,11 @@ def p6_ext_handle_command(cmd, args, game):
         if prev and prev(cmd, args, game):
             return True
         return False
+
+    if cmd == "forget_topics":
+        _p6_cmd_forget_topics(game)
+        return True
+
 
     if cmd == "talk":
         if _p6_cmd_talk(game, args):
