@@ -444,10 +444,20 @@ class Game:
         )
 
     def dispatch(self, line: str) -> bool:
-        parts = line.strip().split()
-        if not parts:
-            return True
-        cmd, args = parts[0].lower(), parts[1:]
+    line = line.strip()
+    if not line:
+        return True
+
+    # --- Numeric shortcut for dialogue (typing "7" acts like "say 7") ---
+    if line.isdigit():
+        try:
+            return _p6_cmd_say(self, [line])
+        except NameError:
+            pass  # if Part 6 isn't loaded yet, fall through
+
+    parts = line.split()
+    cmd, args = parts[0].lower(), parts[1:]
+
 
 # --- Numeric shortcut for dialogue (typing "7" acts like "say 7") ---
 #if cmd.isdigit():
