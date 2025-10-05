@@ -1182,7 +1182,7 @@ P6_PREV_EXT = globals().get("ext_handle_command", None)
 P6_LORE_ACTIONS = {
     "ct_intro", "ct_place", "ct_wilds", "ct_threats",
     "ct_grove_lore", "ct_herb_tips", "ct_grove_sick",
-    "ct_after", "ct_story"
+    "ct_after", "ct_story", "ct_offer_quest"
 }
 
 
@@ -1361,6 +1361,7 @@ def _p6_do_action(game, action_id: str):
         _p6_journal_add(game, "Caretaker offered a task: Heal the Grove (bring 2 herbs).")
         game.say('Caretaker: "The northern grove is sick. Bring me 2 herbs for a remedy."')
         game.say("Type: accept heal_grove   (or talk caretaker again for details)")
+        seen.add("ct_offer_quest")
         reopen(); return
 
     if action_id == "ct_remind":
