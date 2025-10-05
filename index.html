@@ -1225,6 +1225,9 @@ def _p6_show_dialog(game, npc: str, options):
     game.say("Say a number with: say [n]")
 
 def _p6_open_caretaker_dialog(game, show_all: bool = False):
+    # Ensure the seen bucket exists (even if Part 6 was reloaded)
+    seen = game._p6.setdefault("seen", {}).setdefault("caretaker", set())
+
     q = game._p6["quests"]["heal_grove"]
     state = q["state"]
 
@@ -1258,23 +1261,25 @@ def _p6_open_caretaker_dialog(game, show_all: bool = False):
             ("Goodbye.", "ct_bye"),
         ]
 
-    # Filter: hide lore you've already asked (unless user chose "show all")
     if not show_all:
-        seen = game._p6["seen"]["caretaker"]
-        def keep(opt):
-            _text, aid = opt
-            if aid == "ct_bye": return True
-            if aid in P6_LORE_ACTIONS and aid in seen:
-                return False
-            return True
+        # Hide lore we already asked (leave Goodbye)
+        hidden_any = False
+        filtered = []
+        for text, aid in opts:
+            if aid == "ct_bye":
+                filtered.append((text, aid))
+            elif aid in P6_LORE_ACTIONS and aid in seen:
+                hidden_any = True
+                continue
+            else:
+                filtered.append((text, aid))
 
-        filtered = [o for o in opts if keep(o)]
-        # If we hid anything, prepend a “show all” toggle
-        if len(filtered) < len(opts) and filtered:
+        # If we hid something and still have choices, add a toggle
+        if hidden_any and any(aid != "ct_bye" for (_t, aid) in filtered):
             filtered = [("(Show previous topics…)", "ct_show_all")] + filtered
 
-        # If only Goodbye remains, end gracefully
-        if not [o for o in filtered if o[1] != "ct_bye"]:
+        # If only Goodbye remains, end cleanly
+        if not [1 for (_t, aid) in filtered if aid != "ct_bye"]:
             game.say('Caretaker: "That’s all I’ve for now."')
             game._p6["dialog"] = None
             return
@@ -1282,6 +1287,15 @@ def _p6_open_caretaker_dialog(game, show_all: bool = False):
         opts = filtered
 
     _p6_show_dialog(game, "Caretaker", opts)
+
+def _p6_cmd_forget_topics(game):
+    game._p6.setdefault("seen", {}).setdefault("caretaker", set()).clear()
+    print("Forgot caretaker topics.")
+
+# in p6_ext_handle_command(...)
+if cmd == "forget_topics":
+    _p6_cmd_forget_topics(game)
+    return True
 
 
 def _p6_eval_requirements(game, need: dict) -> bool:
