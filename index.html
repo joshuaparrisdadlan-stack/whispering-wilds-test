@@ -1213,18 +1213,18 @@ def part6_post_init(game):
         return
     game._p6 = {
         "rng": random.Random(6006),
-        "dialog": None,  # {"npc": str, "options": [(text, action_id), ...]}
+        "dialog": None,
         "quests": {
             "heal_grove": {
                 "title": "Heal the Grove",
-                "state": "new",     # new -> offered -> accepted -> completed -> turned_in
+                "state": "new",
                 "need": {"herb": 2},
                 "lore": "The northern grove is ailing. Brew a simple remedy.",
                 "reward": {"gold": 3, "xp": 1},
             },
             "forage_lesson": {
                 "title": "Lesson: Foraging",
-                "state": "new",           # new -> offered -> accepted -> completed -> turned_in
+                "state": "new",
                 "need": {},
                 "lore": "The Caretaker will teach you to forage at the brook.",
                 "reward": {"gold": 1, "xp": 1},
